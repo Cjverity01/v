@@ -1,4 +1,3 @@
-#test
 import discord
 from datetime import datetime
 from discord.ext import commands
@@ -7,63 +6,27 @@ from discord.ext import commands
 from core import checks
 from core.models import PermissionLevel
 
-options_menu="You have provided invalid dept code.\n\n`dge` - Discord Growth Experts\n`pt` - Partnership Team\n`sales` - Sales team\n`et` - Events Team\n`mod` - Moderation Team\n`management` - Management Team\n`bugs` - Bug Handlers\n`purchases` - Sales Team Purchase Setup"
-
+options_menu="You have provided invalid dept code.\n\n`dev` - Developers\n`pt` - Partnership Team\n`gs` -Support Team\n`mod` - Moderation Team
 DEPS_DATA = {
-    "dge": {
+    "dev": {
         "category_id": 692462165470478337,
-        "pretty_name": "DISCORD GROWTH EXPERT",
-        "reminders": "1. Do __NOT__ DM the invite link unless asked to.\n2. Be patient. It will take some time to wait for DGE to get to you.\n3. Please read the pins in #growth-questions channel before asking for help here.",
-        "role_id": 692411479936335993,
+        "pretty_name": "DEVELOPERS",
+        "reminders": "I have transfered this ticket to our developers. Please wait for a response!",
+        "role_id": 1322008053469544498,
         "send_message_to_user": True
     },
-    "pt": {
-        "category_id": 692462475009982515,
-        "pretty_name": "PARTNERSHIP TEAM",
-        "reminders": None,
-        "role_id": 692411386789232681,
-        "send_message_to_user": True
-    },
-    "sales": {
-        "category_id": 706568047271608391,
-        "pretty_name": "SALES TEAM",
-        "reminders": None,
-        "role_id": 706568993627963434,
+    "gs": {
+        "category_id": 1275836768180113479,
+        "pretty_name": "SUPPORT TEAM",
+        "reminders": "I have transfered this ticket to support. Please wait.",
+        "role_id": 1321985318127403078,
         "send_message_to_user": True
     },
     "mod": {
-        "category_id": 707459219393347634,
-        "pretty_name": "TRUST AND SAFETY TEAM",
-        "reminders": "If you are reporting an offense please send us the user's ID and proof of the offense.",
-        "role_id": 1065596123332481084,
-        "send_message_to_user": True
-    },
-    "et": {
-        "category_id": 736571220585349140,
-        "pretty_name": "EVENTS TEAM",
-        "reminders": None,
-        "role_id": 737065323647205598,
-        "send_message_to_user": True
-    },
-    "management": {
-        "category_id": 692463503633547406,
-        "pretty_name": "MANAGEMENT TEAM",
-        "reminders": None,
-        "role_id": 692394098396627004,
-        "send_message_to_user": True
-    },
-    "purchases": {
-        "category_id": 1134556566348124232,
-        "pretty_name": "PREMIUM SERVICES / PURCHASES TEAM",
-        "reminders": None,
-        "role_id": 706568993627963434,
-        "send_message_to_user": True
-    },
-    "bugs": {
-        "category_id": 692514669591789608,
-        "pretty_name": "BUG REPORTS DEPARTMENT",
-        "reminders": None,
-        "role_id": 1063109499600257044,
+        "category_id": 1260329657866129559,
+        "pretty_name": "MODERATOR",
+        "reminders": "I have escalated this tickets to the moderators. Please wait.",
+        "role_id": 1256888999277101117,
         "send_message_to_user": True
     },
 }
