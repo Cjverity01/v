@@ -1,3 +1,4 @@
+#test
 import discord
 from datetime import datetime
 from discord.ext import commands
@@ -6,7 +7,7 @@ from discord.ext import commands
 from core import checks
 from core.models import PermissionLevel
 
-options_menu="You have provided invalid dept code.\n\n`dev` - Developers\n`pt` - Partnership Team\n`gs` -Support Team\n`mod` - Moderation Team
+options_menu="You have provided invalid dept code.\n\n`dev` - Developers\n`pt` - Partnership Team\n`gs` -Support Team\n`mod` - Moderation Team\n
 DEPS_DATA = {
     "dev": {
         "category_id": 692462165470478337,
