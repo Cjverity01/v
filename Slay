@@ -1,0 +1,91 @@
+import time
+import requests
+import subprocess
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from the .env file
+load_dotenv()
+
+# Get the PATREON_USER_ID from the environment variable
+USER_ID = os.getenv("PATREON_USER_ID")
+
+# Hardcoded PATREON_API_TOKEN (or load it from environment if you prefer)
+PATREON_API_TOKEN = "your_patreon_api_token_here"  # <-- Hardcoded token (or use dotenv if you want to)
+
+# The Patreon API URL to check the campaign data
+API_URL = "https://www.patreon.com/api/oauth2/v2/campaigns"
+
+# Function to check if the user is subscribed
+def check_subscription():
+    headers = {
+        "Authorization": f"Bearer {PATREON_API_TOKEN}",
+    }
+
+    try:
+        response = requests.get(API_URL, headers=headers)
+        response.raise_for_status()
+
+        # Parse the response to find the user ID in the supporters list
+        data = response.json()
+
+        # Search for the user ID in the list of supporters
+        for supporter in data.get("data", []):
+            for supporter_data in supporter.get("relationships", {}).get("supporters", {}).get("data", []):
+                if supporter_data.get("id") == USER_ID:
+                    return True  # User is subscribed
+
+        return False  # User is not subscribed
+
+    except requests.exceptions.RequestException as e:
+        print(f"Error while checking subscription: {e}")
+        return False
+
+# Function to start the modmail service using pm2
+def start_modmail():
+    try:
+        # Start the modmail service with pm2, specifying the script name and process name
+        subprocess.run(["pm2", "start", "modmail.sh", "--name", "modmail"], check=True)
+        print("Modmail started.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to start modmail: {e}")
+
+# Function to stop and delete the modmail service from pm2
+def stop_and_delete_modmail():
+    try:
+        # First, stop the modmail service if it's running
+        subprocess.run(["pm2", "stop", "modmail"], check=True)
+        # Then, delete it from pm2's process list
+        subprocess.run(["pm2", "delete", "modmail"], check=True)
+        print("Modmail stopped and deleted from pm2.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to stop or delete modmail: {e}")
+
+# Main function that will run the task while the user is subscribed
+def run_task():
+    modmail_running = False
+
+    while True:
+        if check_subscription():
+            if not modmail_running:
+                print("User is subscribed. Starting modmail...")
+                start_modmail()
+                modmail_running = True
+            else:
+                print("Modmail is already running.")
+                
+            # Wait and check again after a set time (e.g., 10 minutes)
+            time.sleep(600)  # Check every 10 minutes
+        else:
+            if modmail_running:
+                print("User's subscription has expired or stopped. Stopping and deleting modmail...")
+                stop_and_delete_modmail()
+                modmail_running = False
+            else:
+                print("Modmail is already stopped and deleted.")
+            
+            # Break the loop to stop the script after a subscription ends
+            break  # Stop the script when the user is no longer subscribed
+
+if __name__ == "__main__":
+    run_task()
